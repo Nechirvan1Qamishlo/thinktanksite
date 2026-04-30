@@ -47,7 +47,10 @@ export const POST: APIRoute = async (context) => {
       });
     }
 
-    const apiKey = (context.locals as any).runtime?.env?.ANTHROPIC_API_KEY ?? import.meta.env.ANTHROPIC_API_KEY;
+    // Try all possible ways to get the API key on Cloudflare Pages
+    const env = (context.locals as any)?.runtime?.env;
+    const apiKey = env?.ANTHROPIC_API_KEY || import.meta.env.ANTHROPIC_API_KEY;
+
     if (!apiKey) {
       return new Response(JSON.stringify({ error: 'API key not configured' }), {
         status: 500,
