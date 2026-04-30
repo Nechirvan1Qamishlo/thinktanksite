@@ -1,52 +1,35 @@
 ---
 ---
+
 <html>
   <head>
-    <meta charset="UTF-8">
-    <title>Under Development</title>
-    <style>
-      body {
-        margin: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        text-align: center;
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-        color: white;
-      }
-      .container {
-        background: rgba(255,255,255,0.05);
-        padding: 40px;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        max-width: 500px;
-      }
-      h1 { margin-bottom: 10px; font-size: 28px; }
-      h2 { margin-bottom: 20px; font-weight: normal; color: #ccc; }
-      p { margin: 10px 0; font-size: 16px; color: #ddd; }
-      a {
-        display: inline-block;
-        margin-top: 15px;
-        padding: 10px 20px;
-        background: #00c6ff;
-        color: #000;
-        text-decoration: none;
-        border-radius: 25px;
-        font-weight: bold;
-        transition: 0.3s;
-      }
-      a:hover { background: #00a3cc; }
-    </style>
+    <meta charset="UTF-8" />
+    <title>Azadi Library</title>
   </head>
   <body>
-    <div class="container">
-      <h1>Malper di çêkirinê de ye</h1>
-      <h2>Site Under Development</h2>
-      <p>Ji bo zanyariyên zêdetir, ji kerema xwe bi me re têkilî daynin.</p>
-      <p>For more information, please contact us.</p>
-      <a href="mailto:info@azadi.solutions">info@azadi.solutions</a>
-    </div>
+    <main style="font-family: Arial; max-width: 900px; margin: 40px auto; padding: 20px;">
+      <h1>Azadi Library</h1>
+      <p>A simple digital library for books and resources.</p>
+
+      <input 
+        type="text" 
+        placeholder="Search books..." 
+        style="padding: 12px; width: 100%; margin: 20px 0; font-size: 16px;"
+      />
+
+      <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+        <div style="border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
+          <h2>Book Title 1</h2>
+          <p>Author name</p>
+          <a href="#">Read / Download</a>
+        </div>
+
+        <div style="border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
+          <h2>Book Title 2</h2>
+          <p>Author name</p>
+          <a href="#">Read / Download</a>
+        </div>
+      </section>
+    </main>
   </body>
 </html>
