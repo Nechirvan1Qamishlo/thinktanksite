@@ -5,31 +5,126 @@
   <head>
     <meta charset="UTF-8" />
     <title>Azadi Library</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: #f7f7f7;
+      }
+
+      header {
+        background: #222;
+        color: white;
+        padding: 15px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      nav a {
+        color: white;
+        margin-left: 20px;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      nav a:hover {
+        text-decoration: underline;
+      }
+
+      main {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+      }
+
+      h1 {
+        margin-bottom: 10px;
+      }
+
+      .search {
+        padding: 12px;
+        width: 100%;
+        margin: 20px 0;
+        font-size: 16px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+      }
+
+      .card {
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 10px;
+        background: white;
+        transition: 0.2s;
+      }
+
+      .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      }
+
+      .card a {
+        display: inline-block;
+        margin-top: 10px;
+        color: #007bff;
+        text-decoration: none;
+      }
+    </style>
   </head>
+
   <body>
-    <main style="font-family: Arial; max-width: 900px; margin: 40px auto; padding: 20px;">
-      <h1>Azadi Library</h1>
+
+    <!-- Header -->
+    <header>
+      <div><strong>Azadi Library</strong></div>
+
+      <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/kurdish-writer">Writers</a>
+        <a href="/blog">Blog</a>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <h1>Welcome to Azadi Library</h1>
       <p>A simple digital library for books and resources.</p>
 
-      <input 
-        type="text" 
-        placeholder="Search books..." 
-        style="padding: 12px; width: 100%; margin: 20px 0; font-size: 16px;"
+      <input
+        class="search"
+        type="text"
+        placeholder="Search books..."
       />
 
-      <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
-        <div style="border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
+      <section class="grid">
+
+        <div class="card">
           <h2>Book Title 1</h2>
           <p>Author name</p>
           <a href="#">Read / Download</a>
         </div>
 
-        <div style="border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
+        <div class="card">
           <h2>Book Title 2</h2>
           <p>Author name</p>
           <a href="#">Read / Download</a>
         </div>
+
+        <div class="card">
+          <h2>Book Title 3</h2>
+          <p>Author name</p>
+          <a href="#">Read / Download</a>
+        </div>
+
       </section>
     </main>
+
   </body>
 </html>
