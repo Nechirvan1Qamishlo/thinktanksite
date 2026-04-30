@@ -47,7 +47,6 @@ export const POST: APIRoute = async (context) => {
       });
     }
 
-    // Try all possible ways to get the API key on Cloudflare Pages
     const env = (context.locals as any)?.runtime?.env;
     const apiKey = env?.ANTHROPIC_API_KEY || import.meta.env.ANTHROPIC_API_KEY;
 
@@ -68,7 +67,7 @@ export const POST: APIRoute = async (context) => {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 2000,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: userMessage }],
