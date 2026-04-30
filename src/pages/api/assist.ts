@@ -35,7 +35,8 @@ Response format (strict JSON, no other output):
 If no changes are needed, return changes as an empty array and say so in the feedback.
 If the input is not Kurdish, set corrected_text to the original and explain in the feedback fields.`;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async (context) => {
+  const { request } = context;
   try {
     const { text, mode } = await request.json();
 
@@ -46,7 +47,7 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    const apiKey = import.meta.env.ANTHROPIC_API_KEY;
+    const apiKey = (context.locals as any).runtime?.env?.ANTHROPIC_API_KEY ?? import.meta.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
       return new Response(JSON.stringify({ error: 'API key not configured' }), {
         status: 500,
