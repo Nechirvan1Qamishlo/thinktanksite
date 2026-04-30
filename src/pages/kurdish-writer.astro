@@ -1,0 +1,750 @@
+---
+// src/pages/kurdish-writer.astro
+// Kurdish Grammar & Writing Assistant
+---
+
+<!DOCTYPE html>
+<html lang="ku" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>یارمەتیدەری نووسینی کوردی — Kurdish Writing Assistant</title>
+  <meta name="description" content="A free AI-powered writing assistant for Kurdish — fixes grammar, improves style, and simplifies text in Sorani and Kurmanji." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:   #0D5C3A;
+      --green-l: #E6F2EC;
+      --green-m: #1A7A50;
+      --gold:    #C9952A;
+      --gold-l:  #FDF4E3;
+      --red:     #9B2335;
+      --bg:      #F9F6F1;
+      --surface: #FFFFFF;
+      --border:  #E2DDD6;
+      --text:    #1A1814;
+      --muted:   #6B6560;
+      --radius:  12px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ─── Header ─────────────────────────────────── */
+    header {
+      background: var(--green);
+      padding: 0 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 3px solid var(--gold);
+    }
+    .header-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 62px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .logo-sun {
+      width: 32px; height: 32px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-sun svg { width: 18px; height: 18px; }
+    .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+    .logo-ku {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 14px; font-weight: 600;
+      color: #FDF4E3;
+      direction: rtl;
+    }
+    .logo-en {
+      font-family: 'DM Serif Display', serif;
+      font-size: 13px; color: rgba(255,255,255,0.65);
+    }
+    .header-badge {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.04em;
+      color: var(--gold);
+      border: 1px solid rgba(201,149,42,0.4);
+      padding: 4px 10px; border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    /* ─── Hero ───────────────────────────────────── */
+    .hero {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 2rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--green);
+    }
+    .hero-ku {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 1.1rem;
+      color: var(--muted);
+      direction: rtl;
+      margin-bottom: 0.3rem;
+    }
+    .hero p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .dialect-badges {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 1.2rem;
+      flex-wrap: wrap;
+    }
+    .dialect-badge {
+      font-size: 12px; font-weight: 500;
+      padding: 4px 12px; border-radius: 20px;
+      background: var(--green-l);
+      color: var(--green);
+      border: 1px solid rgba(13,92,58,0.2);
+    }
+
+    /* ─── Main layout ────────────────────────────── */
+    .main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    /* ─── Mode tabs ──────────────────────────────── */
+    .mode-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .mode-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 500;
+      padding: 7px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .mode-btn:hover { border-color: var(--green-m); color: var(--green); }
+    .mode-btn.active {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+    .mode-btn .mode-ku {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 11px;
+      opacity: 0.8;
+      display: block;
+      line-height: 1.2;
+    }
+
+    /* ─── Input card ─────────────────────────────── */
+    .input-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 1.2rem;
+    }
+    .input-label {
+      padding: 12px 16px 0;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    #kurdish-input {
+      width: 100%;
+      min-height: 160px;
+      padding: 12px 16px 16px;
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 1.1rem;
+      line-height: 1.9;
+      color: var(--text);
+      background: transparent;
+      border: none;
+      outline: none;
+      resize: vertical;
+      direction: rtl;
+    }
+    #kurdish-input::placeholder {
+      color: #C4BEB7;
+      font-family: 'Noto Naskh Arabic', serif;
+    }
+    .input-footer {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    #char-count { font-size: 12px; color: var(--muted); }
+    .script-toggle {
+      display: flex;
+      gap: 4px;
+    }
+    .script-btn {
+      font-size: 12px; font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .script-btn.active {
+      background: var(--gold-l);
+      color: var(--gold);
+      border-color: rgba(201,149,42,0.35);
+    }
+
+    /* ─── Submit button ──────────────────────────── */
+    #submit-btn {
+      width: 100%;
+      padding: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 500;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 2rem;
+    }
+    #submit-btn:hover { background: var(--green-m); }
+    #submit-btn:active { transform: scale(0.99); }
+    #submit-btn:disabled { background: #9DBFB0; cursor: not-allowed; }
+    .btn-spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.35);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Results ────────────────────────────────── */
+    #results { display: none; }
+
+    .result-section {
+      margin-bottom: 1.5rem;
+    }
+    .section-label {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px;
+    }
+
+    .corrected-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--green);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.4rem;
+      position: relative;
+    }
+    #corrected-text {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 1.15rem;
+      line-height: 2;
+      color: var(--text);
+      direction: rtl;
+      white-space: pre-wrap;
+    }
+    #corrected-text.latin {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      direction: ltr;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 10px; right: 10px;
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .copy-btn:hover { background: var(--green-l); color: var(--green); }
+
+    /* dialect info pill */
+    .info-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 1.2rem;
+    }
+    .info-pill {
+      font-size: 12px; font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    .pill-dialect {
+      background: var(--green-l); color: var(--green);
+      border: 1px solid rgba(13,92,58,0.2);
+    }
+    .pill-changes {
+      background: var(--gold-l); color: var(--gold);
+      border: 1px solid rgba(201,149,42,0.25);
+    }
+    .pill-none {
+      background: #EEF5EE; color: #2E6B3A;
+      border: 1px solid rgba(46,107,58,0.2);
+    }
+
+    /* Changes list */
+    .changes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .change-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.2rem;
+    }
+    .change-words {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .word-orig {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 1rem;
+      direction: rtl;
+      color: var(--red);
+      background: #FDF0F2;
+      padding: 3px 10px;
+      border-radius: 6px;
+      text-decoration: line-through;
+      text-decoration-color: rgba(155,35,53,0.4);
+    }
+    .word-orig.latin {
+      font-family: 'DM Serif Display', serif;
+      direction: ltr;
+    }
+    .word-arrow { color: var(--muted); font-size: 14px; }
+    .word-new {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 1rem;
+      direction: rtl;
+      color: var(--green);
+      background: var(--green-l);
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .word-new.latin {
+      font-family: 'DM Serif Display', serif;
+      direction: ltr;
+    }
+    .change-explanation {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .change-ku {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 13px;
+      direction: rtl;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* Feedback card */
+    .feedback-card {
+      background: var(--gold-l);
+      border: 1px solid rgba(201,149,42,0.25);
+      border-radius: var(--radius);
+      padding: 1rem 1.2rem;
+    }
+    .feedback-card p {
+      font-size: 14px; color: #6B5520; line-height: 1.6; margin-bottom: 6px;
+    }
+    .feedback-card .fb-ku {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 14px;
+      direction: rtl;
+      color: #7A4A10;
+    }
+
+    /* Error state */
+    .error-box {
+      background: #FEF2F2;
+      border: 1px solid #FCA5A5;
+      border-radius: var(--radius);
+      padding: 1rem 1.2rem;
+      color: var(--red);
+      font-size: 14px;
+      display: none;
+    }
+
+    /* ─── Footer strip ───────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--green); text-decoration: none; }
+
+    @media (max-width: 500px) {
+      .hero h1 { font-size: 1.75rem; }
+      .mode-btn .mode-ku { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Header ─────────────────────────────────────── -->
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <div class="logo-sun">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="4" fill="#0D5C3A"/>
+          <line x1="12" y1="2" x2="12" y2="5" stroke="#0D5C3A" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="12" y1="19" x2="12" y2="22" stroke="#0D5C3A" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="2" y1="12" x2="5" y2="12" stroke="#0D5C3A" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="19" y1="12" x2="22" y2="12" stroke="#0D5C3A" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="4.93" y1="4.93" x2="7.05" y2="7.05" stroke="#0D5C3A" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="16.95" y1="16.95" x2="19.07" y2="19.07" stroke="#0D5C3A" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="19.07" y1="4.93" x2="16.95" y2="7.05" stroke="#0D5C3A" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="7.05" y1="16.95" x2="4.93" y2="19.07" stroke="#0D5C3A" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-ku">یارمەتیدەری نووسین</span>
+        <span class="logo-en">Kurdish Writer</span>
+      </div>
+    </a>
+    <span class="header-badge">Free · AI powered</span>
+  </div>
+</header>
+
+<!-- ─── Hero ───────────────────────────────────────── -->
+<div class="hero">
+  <p class="hero-ku">نووسینی کوردیت باشتر بکە</p>
+  <h1>Write better <em>Kurdish</em></h1>
+  <p>Paste any Kurdish text — Sorani or Kurmanji — and the AI will fix, improve, or simplify it for you.</p>
+  <div class="dialect-badges">
+    <span class="dialect-badge">سۆرانی Sorani</span>
+    <span class="dialect-badge">Kurmancî Kurmanji</span>
+    <span class="dialect-badge">خاوێنکردنەوەی ڕێزمان Grammar</span>
+    <span class="dialect-badge">Çêkirina Şêwazê Style</span>
+  </div>
+</div>
+
+<!-- ─── Main ────────────────────────────────────────── -->
+<main class="main">
+
+  <!-- Mode selector -->
+  <div class="mode-row" role="group" aria-label="Assistance mode">
+    <button class="mode-btn active" data-mode="grammar">
+      Fix grammar
+      <span class="mode-ku">ڕێزمان</span>
+    </button>
+    <button class="mode-btn" data-mode="style">
+      Improve style
+      <span class="mode-ku">شێواز</span>
+    </button>
+    <button class="mode-btn" data-mode="simplify">
+      Simplify
+      <span class="mode-ku">ئاسانکردن</span>
+    </button>
+    <button class="mode-btn" data-mode="formal">
+      Make formal
+      <span class="mode-ku">فەرمی</span>
+    </button>
+  </div>
+
+  <!-- Input card -->
+  <div class="input-card">
+    <div class="input-label">Your Kurdish text</div>
+    <textarea
+      id="kurdish-input"
+      placeholder="کتێبەکە خوێندمەوە، زۆر باش بوو..."
+      aria-label="Enter Kurdish text to improve"
+      spellcheck="false"
+    ></textarea>
+    <div class="input-footer">
+      <span id="char-count">0 characters</span>
+      <div class="script-toggle" aria-label="Script direction">
+        <button class="script-btn active" data-dir="rtl" title="Arabic script (Sorani)">عربی</button>
+        <button class="script-btn" data-dir="ltr" title="Latin script (Kurmanji)">Latin</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <button id="submit-btn" aria-live="polite">
+    <div class="btn-spinner" id="spinner"></div>
+    <span id="btn-label">Check my Kurdish</span>
+  </button>
+
+  <!-- Error -->
+  <div class="error-box" id="error-box" role="alert"></div>
+
+  <!-- Results -->
+  <div id="results" aria-live="polite">
+
+    <div class="info-row" id="info-row"></div>
+
+    <!-- Corrected text -->
+    <div class="result-section">
+      <div class="section-label">Corrected text</div>
+      <div class="corrected-box">
+        <button class="copy-btn" id="copy-btn" aria-label="Copy corrected text">Copy</button>
+        <div id="corrected-text"></div>
+      </div>
+    </div>
+
+    <!-- Changes -->
+    <div class="result-section" id="changes-section">
+      <div class="section-label">Changes made</div>
+      <div class="changes-list" id="changes-list"></div>
+    </div>
+
+    <!-- Feedback -->
+    <div class="result-section">
+      <div class="section-label">Overall feedback</div>
+      <div class="feedback-card">
+        <p id="feedback-en"></p>
+        <p class="fb-ku" id="feedback-ku"></p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  Built with the <a href="https://docs.anthropic.com" target="_blank" rel="noopener">Claude API</a>
+  · Serves Sorani &amp; Kurmanji Kurdish
+  · Free to use
+</footer>
+
+<script>
+  // ── State ──────────────────────────────────────────
+  let activeMode = 'grammar';
+  let activeDir  = 'rtl';
+
+  // ── Mode buttons ───────────────────────────────────
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeMode = btn.dataset.mode;
+    });
+  });
+
+  // ── Script direction toggle ────────────────────────
+  const input = document.getElementById('kurdish-input');
+  document.querySelectorAll('.script-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.script-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeDir = btn.dataset.dir;
+      input.style.direction = activeDir;
+      input.style.fontFamily = activeDir === 'rtl'
+        ? "'Noto Naskh Arabic', serif"
+        : "'DM Serif Display', serif";
+    });
+  });
+
+  // ── Character count ────────────────────────────────
+  const charCount = document.getElementById('char-count');
+  input.addEventListener('input', () => {
+    const len = input.value.length;
+    charCount.textContent = `${len} character${len !== 1 ? 's' : ''}`;
+  });
+
+  // ── Submit ─────────────────────────────────────────
+  const submitBtn  = document.getElementById('submit-btn');
+  const spinner    = document.getElementById('spinner');
+  const btnLabel   = document.getElementById('btn-label');
+  const errorBox   = document.getElementById('error-box');
+  const resultsDiv = document.getElementById('results');
+
+  submitBtn.addEventListener('click', async () => {
+    const text = input.value.trim();
+    if (!text) {
+      showError('Please enter some Kurdish text first.');
+      return;
+    }
+    if (text.length > 3000) {
+      showError('Text is too long. Please keep it under 3000 characters.');
+      return;
+    }
+
+    setLoading(true);
+    hideError();
+    resultsDiv.style.display = 'none';
+
+    try {
+      const res = await fetch('/api/assist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, mode: activeMode }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(err.error || `Server error ${res.status}`);
+      }
+
+      const data = await res.json();
+      renderResults(data);
+    } catch (e) {
+      showError(e.message || 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  // ── Render results ─────────────────────────────────
+  function renderResults(data) {
+    const isLatin = data.script === 'latin';
+
+    // Info pills
+    const infoRow = document.getElementById('info-row');
+    infoRow.innerHTML = '';
+    if (data.dialect) {
+      const dp = document.createElement('span');
+      dp.className = 'info-pill pill-dialect';
+      dp.textContent = `Dialect: ${data.dialect}`;
+      infoRow.appendChild(dp);
+    }
+    const changeCount = (data.changes || []).length;
+    const cp = document.createElement('span');
+    cp.className = `info-pill ${changeCount > 0 ? 'pill-changes' : 'pill-none'}`;
+    cp.textContent = changeCount === 0
+      ? 'No changes needed'
+      : `${changeCount} change${changeCount !== 1 ? 's' : ''} made`;
+    infoRow.appendChild(cp);
+
+    // Corrected text
+    const correctedEl = document.getElementById('corrected-text');
+    correctedEl.textContent = data.corrected_text || '';
+    correctedEl.className = isLatin ? 'latin' : '';
+    correctedEl.style.direction = isLatin ? 'ltr' : 'rtl';
+
+    // Changes
+    const changesList = document.getElementById('changes-list');
+    const changesSection = document.getElementById('changes-section');
+    changesList.innerHTML = '';
+    if (!data.changes || data.changes.length === 0) {
+      changesSection.style.display = 'none';
+    } else {
+      changesSection.style.display = 'block';
+      data.changes.forEach(ch => {
+        const item = document.createElement('div');
+        item.className = 'change-item';
+        item.innerHTML = `
+          <div class="change-words">
+            <span class="word-orig${isLatin ? ' latin' : ''}">${escHtml(ch.original)}</span>
+            <span class="word-arrow">→</span>
+            <span class="word-new${isLatin ? ' latin' : ''}">${escHtml(ch.corrected)}</span>
+          </div>
+          <div class="change-explanation">${escHtml(ch.explanation_en || '')}</div>
+          ${ch.explanation_ku ? `<div class="change-ku">${escHtml(ch.explanation_ku)}</div>` : ''}
+        `;
+        changesList.appendChild(item);
+      });
+    }
+
+    // Feedback
+    document.getElementById('feedback-en').textContent = data.overall_feedback_en || '';
+    document.getElementById('feedback-ku').textContent  = data.overall_feedback_ku  || '';
+
+    resultsDiv.style.display = 'block';
+    resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // ── Copy button ────────────────────────────────────
+  document.getElementById('copy-btn').addEventListener('click', async () => {
+    const text = document.getElementById('corrected-text').textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      const btn = document.getElementById('copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+    } catch {}
+  });
+
+  // ── Helpers ────────────────────────────────────────
+  function setLoading(on) {
+    submitBtn.disabled = on;
+    spinner.style.display = on ? 'block' : 'none';
+    btnLabel.textContent = on ? 'Analysing…' : 'Check my Kurdish';
+  }
+  function showError(msg) {
+    errorBox.textContent = msg;
+    errorBox.style.display = 'block';
+  }
+  function hideError() {
+    errorBox.style.display = 'none';
+  }
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+</script>
+
+</body>
+</html>
